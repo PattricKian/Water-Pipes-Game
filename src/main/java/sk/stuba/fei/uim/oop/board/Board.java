@@ -1,5 +1,5 @@
 
-//TODO : SPRAVIT PREVIOUSTILE ABY SOM UCHOVAL HODNOTU PREDOSLEJ DIRECTION
+
 
 
 
@@ -20,7 +20,7 @@ public class Board extends JPanel {
     private boolean[][] visited;
     private Stack<Tile> path;
     private boolean end;
-    private boolean visitedTile;
+
 
     public Board(int dimension) {
 
@@ -66,13 +66,13 @@ public class Board extends JPanel {
                 if (i == left && j == startY) {
                     this.board[i][j].setState(State.PIPE_START);
                     this.startPipe = this.board[i][j];
-                    System.out.println("Start Pipe coordinates: (" + startPipe.getRow() + "," + startPipe.getCol() + ")");
+
                 }
 
                 if (i == right && j == endY) {
                     this.board[i][j].setState(State.PIPE_END);
                     this.endPipe = this.board[i][j];
-                    System.out.println("End Pipe coordinates: (" + endPipe.getRow() + "," + endPipe.getCol() + ")");
+
                 }
             }
         }
@@ -87,7 +87,6 @@ public class Board extends JPanel {
 
         Tile currentTile = startPipe;
         visited[currentTile.getRow()][currentTile.getCol()] = true;
-
 
         path = new Stack<>();
         path.push(currentTile);
@@ -117,22 +116,20 @@ public class Board extends JPanel {
                 Tile previousTile = path.get(path.indexOf(tile) - 1);
                 Tile nextTile = path.get(path.indexOf(tile) + 1);
                 if (previousTile.getCol() == nextTile.getCol()) {
-
                     tile.setState(State.PIPE_VERTICAL);
-
+                    tile.rotatePipeRandomly();
                     tile.updateDirection();
                 } else if (previousTile.getRow() == nextTile.getRow()) {
                     tile.setState(State.PIPE_HORIZONTAL);
-
+                    tile.rotatePipeRandomly();
                     tile.updateDirection();
                 } else {
-
                     tile.setState(State.PIPE_CORNER);
                     tile.rotatePipeRandomly();
                     tile.updateDirection();
 
                 }
-                System.out.println("Tile coordinates" + tile.getRow() + tile.getCol() + "             TILE DIRECTION:" + tile.getDirection() + "      TILE TYPE:" + tile.getState());
+
             }
 
         }
@@ -160,74 +157,136 @@ public class Board extends JPanel {
     public boolean printAdjacentPipeDirection() {
         Tile currentPipe = startPipe;
         currentPipe.updateTileBackground(currentPipe);
-        System.out.println("END PIPA" + endPipe.getRow() + endPipe.getCol());
+
         Tile adjacentPipe = null;
+        Tile previousPipe = null;
         end = false;
 
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                board[i][j].setVisitedTile(false);
+
+
+        for (Tile[] tiles : board) {
+            for (Tile tile : tiles) {
+                resetTileBackground(tile);
+                currentPipe.updateTileBackground(currentPipe);
+                tile.updateDirection();
+                tile.setVisitedTile(false);
             }
         }
 
+
+        boolean matchFound = false;
         while (!end) {
 
             int row = currentPipe.getRow();
             int col = currentPipe.getCol();
 
-            if (!currentPipe.isVisitedTile()) {
+
+
+            if (!currentPipe.isVisitedTile() ) {
                 currentPipe.setVisitedTile(true);
+
+
             } else {
 
-                continue;
+                return false;
             }
 
 
 
-            if (row > 0 && !board[row - 1][col].isVisitedTile() && board[row - 1][col].getState() != State.EMPTY) {
-                adjacentPipe = board[row - 1][col];
 
+            if (row > 0 && !board[row - 1][col].isVisitedTile() && board[row - 1][col].getState() != State.EMPTY && (board[row - 1][col].getDirection() != Direction.HORIZONTAL && board[row - 1][col].getDirection() != Direction.UPLEFT && board[row - 1][col].getDirection() != Direction.UPRIGHT)) {
+
+
+                adjacentPipe = board[row - 1][col];
+                previousPipe = currentPipe;
+                previousPipe.updateDirection();
                 currentPipe.updateDirection();
                 adjacentPipe.updateDirection();
-                System.out.println("adjancetTILE:" + adjacentPipe.getRow() + adjacentPipe.getCol() + adjacentPipe.getDirection() + "CURRENTTILE: " + currentPipe.getDirection());
+
+
+
+
+
+
                 if ((currentPipe.getDirection() == Direction.VERTICAL || currentPipe.getDirection() == Direction.UPLEFT || currentPipe.getDirection() == Direction.UPRIGHT) && (adjacentPipe.getDirection() == Direction.VERTICAL || adjacentPipe.getDirection() == Direction.DOWNRIGHT || adjacentPipe.getDirection() == Direction.DOWNLEFT)) {
-                    System.out.println("POZERAM ABOVE");
+
+
+
+
+
                     currentPipe = adjacentPipe;
                     currentPipe.updateTileBackground(currentPipe);
-                    System.out.println("PASUJEM ABOVE");
 
-                } else return false;
+
+
+
+
+                    matchFound = true;
+                } else{
+
+
+                    continue;
+                }
 
             }
 
-            else if (col > 0 && !board[row][col - 1].isVisitedTile() && board[row][col - 1].getState() != State.EMPTY) {
-                adjacentPipe = board[row][col - 1];
+            else if (col > 0 && !board[row][col - 1].isVisitedTile() && board[row][col - 1].getState() != State.EMPTY && (board[row][col - 1].getDirection() != Direction.VERTICAL && board[row][col - 1].getDirection() != Direction.UPLEFT && board[row][col - 1].getDirection() != Direction.DOWNLEFT)) {
 
+
+
+
+                adjacentPipe = board[row][col - 1];
+                previousPipe = currentPipe;
+                previousPipe.updateDirection();
                 currentPipe.updateDirection();
                 adjacentPipe.updateDirection();
-                System.out.println("adjancetTILE:" + adjacentPipe.getRow() + adjacentPipe.getCol() + adjacentPipe.getDirection() + "CURRENTTILE: " + currentPipe.getDirection());
+
+
+
 
                 if ((currentPipe.getDirection() == Direction.HORIZONTAL || currentPipe.getDirection() == Direction.DOWNLEFT || currentPipe.getDirection() == Direction.UPLEFT) && (adjacentPipe.getDirection() == Direction.HORIZONTAL || adjacentPipe.getDirection() == Direction.DOWNRIGHT || adjacentPipe.getDirection() == Direction.UPRIGHT)) {
-                    System.out.println("POZERAM LEFT");
+
+
+
+
+
                     currentPipe = adjacentPipe;
                     currentPipe.updateTileBackground(currentPipe);
-                    System.out.println("PASUJEM LEFT");
-                } else return false;
+
+                    matchFound = true;
+                } else{
+
+                    continue;
+                }
             }
 
 
-            else if (col < board[0].length - 1 && !board[row][col + 1].isVisitedTile() && board[row][col + 1].getState() != State.EMPTY) {
+            else if (col < board[0].length - 1 && !board[row][col + 1].isVisitedTile() && board[row][col + 1].getState() != State.EMPTY && !(board[row][col + 1].getDirection() == Direction.VERTICAL || board[row][col + 1].getDirection() == Direction.UPRIGHT || board[row][col + 1].getDirection() == Direction.DOWNRIGHT)) {
+                board[row][col + 1].updateDirection();
+
+
                 adjacentPipe = board[row][col + 1];
+                previousPipe = currentPipe;
+                previousPipe.updateDirection();
                 currentPipe.updateDirection();
                 adjacentPipe.updateDirection();
-                System.out.println("adjancetTILE:" + adjacentPipe.getRow() + adjacentPipe.getCol() + adjacentPipe.getDirection() + "CURRENTTILE: " + currentPipe.getDirection());
+
+
+
+
                 if ((currentPipe.getDirection() == Direction.HORIZONTAL || currentPipe.getDirection() == Direction.DOWNRIGHT || currentPipe.getDirection() == Direction.UPRIGHT) && (adjacentPipe.getDirection() == Direction.HORIZONTAL || adjacentPipe.getDirection() == Direction.DOWNLEFT || adjacentPipe.getDirection() == Direction.UPLEFT)) {
-                    System.out.println("POZERAM RIGHT");
+
+
+
                     currentPipe = adjacentPipe;
                     currentPipe.updateTileBackground(currentPipe);
 
-                    System.out.println("PASUJEM RIGHT");
-                } else return false;
+                    matchFound = true;
+                } else {
+
+                    board[row][col].updateDirection();
+                    continue;
+                }
 
             }
 
@@ -236,32 +295,52 @@ public class Board extends JPanel {
 
 
             else if (row < board.length - 1 && !board[row + 1][col].isVisitedTile() && board[row + 1][col].getState() != State.EMPTY) {
+
+
                 adjacentPipe = board[row + 1][col];
-                System.out.println("POZERAM BELOW");
+                previousPipe = currentPipe;
+                previousPipe.updateDirection();
+
                 currentPipe.updateDirection();
                 adjacentPipe.updateDirection();
 
 
-                System.out.println("adjancetTILE:" + adjacentPipe.getRow() + adjacentPipe.getCol() + adjacentPipe.getDirection() + "CURRENTTILE: " + currentPipe.getDirection());
+
                 if ((currentPipe.getDirection() == Direction.VERTICAL || currentPipe.getDirection() == Direction.DOWNLEFT || currentPipe.getDirection() == Direction.DOWNRIGHT) && (adjacentPipe.getDirection() == Direction.VERTICAL || adjacentPipe.getDirection() == Direction.UPRIGHT || adjacentPipe.getDirection() == Direction.UPLEFT)) {
+
 
                     currentPipe = adjacentPipe;
                     currentPipe.updateTileBackground(currentPipe);
-                    System.out.println("PASUJEM BELOW");
 
-                } else return false;
+                    board[row][col].updateDirection();
+
+                    matchFound = true;
+
+                } else{
+
+                    continue;
+                    }
 
 
+            }
+
+            if (!matchFound) {
+                return false;
             }
 
             if (row == endPipe.getRow() && col == endPipe.getCol()) {
                 end = true;
-                System.out.println("U WIN");
                 return true;
             }
+
         }
 
-        return true;
+        return false;
+    }
+
+    public void resetTileBackground(Tile tile) {
+        tile.setBackground(null);
+        repaint();
     }
 
 
@@ -282,101 +361,3 @@ public class Board extends JPanel {
 
 
 
-
-   /* public boolean checkPipes() {
-        Tile currentTile = startPipe;
-
-        while (currentTile != endPipe) {
-            int currentRow = currentTile.getRow();
-            int currentCol = currentTile.getCol();
-            currentTile.updateDirection();
-            System.out.println("Tile coordinates NOVE" + currentRow + currentCol + "             TILE DIRECTION:" + currentTile.getDirection() + "      TILE TYPE:" + currentTile.getState() );
-
-            Tile nextTile = path.get(path.indexOf(currentTile) + 1);
-            int nextRow = nextTile.getRow();
-            int nextCol = nextTile.getCol();
-            nextTile.updateDirection();
-            System.out.println("Tile coordinates NEXT" + nextRow + nextCol + "             TILE DIRECTION:" + nextTile.getDirection() + "      TILE TYPE:" + nextTile.getState() );
-            Direction currentDirection = currentTile.getDirection();
-            Direction nextDirection = nextTile.getDirection();
-
-            switch (currentDirection) {
-                case HORIZONTAL:
-                    if (nextDirection == Direction.HORIZONTAL && nextCol > currentCol) {
-                        break;
-                    }
-                    if (nextDirection == Direction.DOWNLEFT && nextRow > currentRow) {
-                        break;
-                    }
-                    if (nextDirection == Direction.UPLEFT && nextRow < currentRow) {
-                        break;
-                    }
-                    System.out.println("Incorrect connection at position (" + nextRow + "," + nextCol + ")");
-                    return false;
-                case VERTICAL:
-                    if (nextDirection == Direction.VERTICAL && nextRow > currentRow) {
-                        break;
-                    }
-                    if (nextDirection == Direction.UPLEFT && nextCol < currentCol) {
-                        break;
-                    }
-                    if (nextDirection == Direction.UPRIGHT && nextCol > currentCol) {
-                        break;
-                    }
-                    System.out.println("Incorrect connection at position (" + nextRow + "," + nextCol + ")");
-                    return false;
-                case UPLEFT:
-                    if (nextDirection == Direction.HORIZONTAL && nextCol > currentCol) {
-                        break;
-                    }
-                    if (nextDirection == Direction.UPLEFT && nextRow < currentRow) {
-                        break;
-                    }
-                    if (nextDirection == Direction.UPRIGHT && nextRow > currentRow) {
-                        break;
-                    }
-                    System.out.println("Incorrect connection at position (" + nextRow + "," + nextCol + ")");
-                    return false;
-                case UPRIGHT:
-                    if (nextDirection == Direction.VERTICAL && nextRow > currentRow) {
-                        break;
-                    }
-                    if (nextDirection == Direction.UPLEFT && nextCol > currentCol) {
-                        break;
-                    }
-                    if (nextDirection == Direction.UPRIGHT && nextCol < currentCol) {
-                        break;
-                    }
-                    System.out.println("Incorrect connection at position (" + nextRow + "," + nextCol + ")");
-                    return false;
-                case DOWNLEFT:
-                    if (nextDirection == Direction.VERTICAL && nextRow < currentRow) {
-                        break;
-                    }
-                    if (nextDirection == Direction.DOWNLEFT && nextCol > currentCol) {
-                        break;
-                    }
-                    if (nextDirection == Direction.UPLEFT && nextCol < currentCol) {
-                        break;
-                    }
-                    System.out.println("Incorrect connection at position (" + nextRow + "," + nextCol + ")");
-                    return false;
-                case DOWNRIGHT:
-                    if (nextDirection == Direction.HORIZONTAL && nextCol < currentCol) {
-                        break;
-                    }
-                    if (nextDirection == Direction.DOWNLEFT && nextRow > currentRow) {
-                        break;
-                    }
-                    if (nextDirection == Direction.DOWNRIGHT && nextRow < currentRow) {
-                        break;
-                    }
-                    System.out.println("Incorrect connection at position (" + nextRow + "," + nextCol + ")");
-                    return false;
-            }
-
-            currentTile = nextTile;
-        }
-
-        return true;
-    }*/

@@ -39,7 +39,7 @@ public class Game {
             slider.setPaintLabels(true);
             slider.addChangeListener(logic);
 
-            sideMenu.setLayout(new GridLayout(2, 2));
+            sideMenu.setLayout(new GridLayout(2,2 ));
             sideMenu.add(logic.getLabel());
             sideMenu.add(buttonRestart);
             sideMenu.add(buttonCheck);

@@ -77,6 +77,7 @@ public class Tile extends JPanel {
 
                 g.setColor(Color.BLUE);
                 g2d.rotate(Math.toRadians(this.rotationAngle), x, y);
+                g2d.setStroke(new BasicStroke(20));
                 g2d.drawLine(x, -circleDiameter / 2 + 10, x, circleDiameter / 2 - 10);
                 g2d.rotate(-Math.toRadians(this.rotationAngle), x, y);
                 this.direction = Direction.VERTICAL;
@@ -93,6 +94,7 @@ public class Tile extends JPanel {
 
                 g.setColor(Color.GREEN);
                 g2d.rotate(Math.toRadians(this.rotationAngle), x, y);
+                g2d.setStroke(new BasicStroke(20));
                 g2d.drawLine(x, -circleDiameter / 2 + 10, x, circleDiameter / 2 - 10);
                 g2d.rotate(-Math.toRadians(this.rotationAngle), x, y);
                 this.direction = Direction.VERTICAL;
@@ -101,6 +103,7 @@ public class Tile extends JPanel {
             case PIPE_HORIZONTAL:
                 g.setColor(Color.DARK_GRAY);
                 g2d.rotate(Math.toRadians(this.rotationAngle), x, y);
+                g2d.setStroke(new BasicStroke(20));
                 g2d.drawLine(0, y, componentWidth, y);
                 g2d.rotate(-Math.toRadians(this.rotationAngle), x, y);
                 this.direction = Direction.HORIZONTAL;
@@ -109,14 +112,18 @@ public class Tile extends JPanel {
             case PIPE_VERTICAL:
                 g.setColor(Color.DARK_GRAY);
                 g2d.rotate(Math.toRadians(this.rotationAngle), x, y);
+                g2d.setStroke(new BasicStroke(20));
                 g2d.drawLine(x, 0, x, componentHeight);
+
                 g2d.rotate(-Math.toRadians(this.rotationAngle), x, y);
+
                 this.setDirection(Direction.VERTICAL);
                 break;
 
             case PIPE_CORNER:
                 g.setColor(Color.DARK_GRAY);
                 g2d.rotate(Math.toRadians(this.rotationAngle), x, y);
+                g2d.setStroke(new BasicStroke(20));
                 g2d.drawLine(0, y, x, y);
                 g2d.drawLine(x, y, x, componentHeight);
                 g2d.rotate(-Math.toRadians(this.rotationAngle), x, y);
@@ -133,7 +140,6 @@ public class Tile extends JPanel {
             this.rotationAngle = 0;
 
         updateDirection();
-        System.out.println(this.direction);
         repaint();
     }
 
@@ -256,6 +262,7 @@ public class Tile extends JPanel {
 
         repaint();
     }
+
 
 
 

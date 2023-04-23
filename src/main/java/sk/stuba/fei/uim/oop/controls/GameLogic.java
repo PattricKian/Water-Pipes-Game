@@ -26,7 +26,10 @@ public class GameLogic extends UniversalAdapter {
     private JLabel boardSizeLabel;
     private int currentBoardSize;
     private Tile highlightedTile = null;
-    private int level = 1;
+    private int currentLevel = 1;
+
+
+
     private JButton buttonRestart;
     private JButton buttonCheck;
 
@@ -38,14 +41,14 @@ public class GameLogic extends UniversalAdapter {
         this.mainGame.add(this.currentBoard);
         this.label = new JLabel();
         this.boardSizeLabel = new JLabel();
-        this.updateNameLabel();
+        this.updateLevelLabel();
         this.updateBoardSizeLabel();
         this.buttonRestart = buttonRestart;
         this.buttonCheck = buttonCheck;
     }
 
-    private void updateNameLabel() {
-        this.label.setText("LEVEL: " + level );
+    private void updateLevelLabel() {
+        this.label.setText("LEVEL: " + currentLevel  );
         this.mainGame.revalidate();
         this.mainGame.repaint();
     }
@@ -56,12 +59,16 @@ public class GameLogic extends UniversalAdapter {
         this.mainGame.repaint();
     }
 
-    private void gameRestart() {
+    private void gameRestart(boolean resetLevel) {
         this.mainGame.remove(this.currentBoard);
         this.initializeNewBoard(this.currentBoardSize);
         this.mainGame.add(this.currentBoard);
-        level = 1;
-        this.updateNameLabel();
+        if (resetLevel) {
+            this.currentLevel = 1;
+        } else {
+            this.currentLevel++;
+        }
+        this.updateLevelLabel();
     }
 
     private void initializeNewBoard(int dimension) {
@@ -74,19 +81,19 @@ public class GameLogic extends UniversalAdapter {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == buttonRestart) {
-            this.gameRestart();
+            this.gameRestart(true);
             this.mainGame.revalidate();
             this.mainGame.repaint();
             this.mainGame.setFocusable(true);
             this.mainGame.requestFocus();
         } else if (e.getSource() == buttonCheck) {
 
-            System.out.println("CHECK WIN");
-            this.currentBoard.repaint();
+
             if (this.currentBoard.printAdjacentPipeDirection()){
-                this.gameRestart();
-                level++;
-                updateNameLabel();
+
+                JOptionPane.showMessageDialog(mainGame, "You win! Press OK to generate next level.", "Congratulations!", JOptionPane.INFORMATION_MESSAGE);
+                this.gameRestart(false);
+                this.updateLevelLabel();
 
             }
         }
@@ -136,10 +143,8 @@ public class GameLogic extends UniversalAdapter {
         if (!(current instanceof Tile)) {
             return;
         }
-
         Tile clickedTile = (Tile) current;
         clickedTile.rotatePipe();
-        System.out.println("Tile coordinates" + clickedTile.getRow() + clickedTile.getCol() + "             TILE DIRECTION:" + clickedTile.getDirection()  + "    tile stale" + clickedTile.getState());
 
 
     }
@@ -153,7 +158,7 @@ public class GameLogic extends UniversalAdapter {
     public void stateChanged(ChangeEvent e) {
         this.currentBoardSize = ((JSlider) e.getSource()).getValue();
         this.updateBoardSizeLabel();
-        this.gameRestart();
+        this.gameRestart(true);
         this.mainGame.setFocusable(true);
         this.mainGame.requestFocus();
     }
@@ -163,7 +168,14 @@ public class GameLogic extends UniversalAdapter {
         System.out.println(e);
         switch (e.getKeyCode()) {
             case KeyEvent.VK_R:
-                this.gameRestart();
+                this.gameRestart(true);
+                break;
+            case KeyEvent.VK_ENTER:
+                if (this.currentBoard.printAdjacentPipeDirection()){
+                    JOptionPane.showMessageDialog(mainGame, "You win! Press OK to generate next level.", "Congratulations!", JOptionPane.INFORMATION_MESSAGE);
+                    this.gameRestart(false);
+                    this.updateLevelLabel();
+                }
                 break;
             case KeyEvent.VK_ESCAPE:
                 this.mainGame.dispose();
