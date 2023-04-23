@@ -6,9 +6,8 @@ public enum State {
     PIPE_VERTICAL,
     PIPE_START,
     PIPE_END,
-    PIPE_CORNER,
-    PIPE_CORNER_ROTATED,
-    ROTATATION;
+    PIPE_CORNER
+
 
 
 

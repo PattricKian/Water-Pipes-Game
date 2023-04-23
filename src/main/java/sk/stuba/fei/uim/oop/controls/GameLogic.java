@@ -2,18 +2,15 @@ package sk.stuba.fei.uim.oop.controls;
 
 import lombok.Getter;
 import sk.stuba.fei.uim.oop.board.Board;
-import sk.stuba.fei.uim.oop.gui.Game;
-import sk.stuba.fei.uim.oop.board.State;
 import sk.stuba.fei.uim.oop.board.Tile;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Comparator;
+
+
 
 public class GameLogic extends UniversalAdapter {
 

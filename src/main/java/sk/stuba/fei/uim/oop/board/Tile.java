@@ -13,7 +13,6 @@ public class Tile extends JPanel {
     @Getter
     @Setter
     private State state;
-    @Setter
     private boolean highlight;
     @Getter
     @Setter
@@ -21,8 +20,7 @@ public class Tile extends JPanel {
     @Getter
     @Setter
     private Direction direction;
-    @Getter
-    @Setter
+
 
 
 
