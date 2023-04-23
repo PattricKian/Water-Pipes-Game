@@ -131,10 +131,6 @@ public class GameLogic extends UniversalAdapter {
     }
 
 
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
 
     @Override
     public void mousePressed(MouseEvent e) {
@@ -148,10 +144,6 @@ public class GameLogic extends UniversalAdapter {
 
 
     }
-
-
-
-
 
 
     @Override
