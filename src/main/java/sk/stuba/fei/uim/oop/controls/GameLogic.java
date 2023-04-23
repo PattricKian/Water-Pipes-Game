@@ -89,7 +89,7 @@ public class GameLogic extends UniversalAdapter {
         } else if (e.getSource() == buttonCheck) {
 
 
-            if (this.currentBoard.printAdjacentPipeDirection()){
+            if (this.currentBoard.checkAdjacentPipeDirection()){
 
                 JOptionPane.showMessageDialog(mainGame, "You win! Press OK to generate next level.", "Congratulations!", JOptionPane.INFORMATION_MESSAGE);
                 this.gameRestart(false);
@@ -163,7 +163,7 @@ public class GameLogic extends UniversalAdapter {
                 this.gameRestart(true);
                 break;
             case KeyEvent.VK_ENTER:
-                if (this.currentBoard.printAdjacentPipeDirection()){
+                if (this.currentBoard.checkAdjacentPipeDirection()){
                     JOptionPane.showMessageDialog(mainGame, "You win! Press OK to generate next level.", "Congratulations!", JOptionPane.INFORMATION_MESSAGE);
                     this.gameRestart(false);
                     this.updateLevelLabel();

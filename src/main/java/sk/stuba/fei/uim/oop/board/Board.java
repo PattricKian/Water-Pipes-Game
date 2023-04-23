@@ -152,7 +152,7 @@ public class Board extends JPanel {
         return neighbors;
     }
 
-    public boolean printAdjacentPipeDirection() {
+    public boolean checkAdjacentPipeDirection() {
         Tile currentPipe = startPipe;
         currentPipe.updateTileBackground(currentPipe);
         Tile adjacentPipe;
