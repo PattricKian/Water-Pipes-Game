@@ -1,8 +1,6 @@
 
 
 
-
-
 package sk.stuba.fei.uim.oop.board;
 
 
@@ -157,11 +155,9 @@ public class Board extends JPanel {
     public boolean printAdjacentPipeDirection() {
         Tile currentPipe = startPipe;
         currentPipe.updateTileBackground(currentPipe);
-
-        Tile adjacentPipe = null;
-        Tile previousPipe = null;
+        Tile adjacentPipe;
+        Tile previousPipe;
         end = false;
-
 
 
         for (Tile[] tiles : board) {
@@ -181,8 +177,7 @@ public class Board extends JPanel {
             int col = currentPipe.getCol();
 
 
-
-            if (!currentPipe.isVisitedTile() ) {
+            if (!currentPipe.isVisitedTile()) {
                 currentPipe.setVisitedTile(true);
 
 
@@ -192,134 +187,65 @@ public class Board extends JPanel {
             }
 
 
-
-
             if (row > 0 && !board[row - 1][col].isVisitedTile() && board[row - 1][col].getState() != State.EMPTY && (board[row - 1][col].getDirection() != Direction.HORIZONTAL && board[row - 1][col].getDirection() != Direction.UPLEFT && board[row - 1][col].getDirection() != Direction.UPRIGHT)) {
-
-
                 adjacentPipe = board[row - 1][col];
                 previousPipe = currentPipe;
                 previousPipe.updateDirection();
                 currentPipe.updateDirection();
                 adjacentPipe.updateDirection();
 
-
-
-
-
-
                 if ((currentPipe.getDirection() == Direction.VERTICAL || currentPipe.getDirection() == Direction.UPLEFT || currentPipe.getDirection() == Direction.UPRIGHT) && (adjacentPipe.getDirection() == Direction.VERTICAL || adjacentPipe.getDirection() == Direction.DOWNRIGHT || adjacentPipe.getDirection() == Direction.DOWNLEFT)) {
-
-
-
-
-
                     currentPipe = adjacentPipe;
                     currentPipe.updateTileBackground(currentPipe);
-
-
-
-
-
                     matchFound = true;
-                } else{
-
-
+                } else {
                     continue;
                 }
 
-            }
-
-            else if (col > 0 && !board[row][col - 1].isVisitedTile() && board[row][col - 1].getState() != State.EMPTY && (board[row][col - 1].getDirection() != Direction.VERTICAL && board[row][col - 1].getDirection() != Direction.UPLEFT && board[row][col - 1].getDirection() != Direction.DOWNLEFT)) {
-
-
-
-
+            } else if (col > 0 && !board[row][col - 1].isVisitedTile() && board[row][col - 1].getState() != State.EMPTY && (board[row][col - 1].getDirection() != Direction.VERTICAL && board[row][col - 1].getDirection() != Direction.UPLEFT && board[row][col - 1].getDirection() != Direction.DOWNLEFT)) {
                 adjacentPipe = board[row][col - 1];
                 previousPipe = currentPipe;
                 previousPipe.updateDirection();
                 currentPipe.updateDirection();
                 adjacentPipe.updateDirection();
-
-
-
-
                 if ((currentPipe.getDirection() == Direction.HORIZONTAL || currentPipe.getDirection() == Direction.DOWNLEFT || currentPipe.getDirection() == Direction.UPLEFT) && (adjacentPipe.getDirection() == Direction.HORIZONTAL || adjacentPipe.getDirection() == Direction.DOWNRIGHT || adjacentPipe.getDirection() == Direction.UPRIGHT)) {
-
-
-
-
-
                     currentPipe = adjacentPipe;
                     currentPipe.updateTileBackground(currentPipe);
-
                     matchFound = true;
-                } else{
-
+                } else {
                     continue;
                 }
-            }
-
-
-            else if (col < board[0].length - 1 && !board[row][col + 1].isVisitedTile() && board[row][col + 1].getState() != State.EMPTY && !(board[row][col + 1].getDirection() == Direction.VERTICAL || board[row][col + 1].getDirection() == Direction.UPRIGHT || board[row][col + 1].getDirection() == Direction.DOWNRIGHT)) {
+            } else if (col < board[0].length - 1 && !board[row][col + 1].isVisitedTile() && board[row][col + 1].getState() != State.EMPTY && !(board[row][col + 1].getDirection() == Direction.VERTICAL || board[row][col + 1].getDirection() == Direction.UPRIGHT || board[row][col + 1].getDirection() == Direction.DOWNRIGHT)) {
                 board[row][col + 1].updateDirection();
-
-
                 adjacentPipe = board[row][col + 1];
                 previousPipe = currentPipe;
                 previousPipe.updateDirection();
                 currentPipe.updateDirection();
                 adjacentPipe.updateDirection();
 
-
-
-
                 if ((currentPipe.getDirection() == Direction.HORIZONTAL || currentPipe.getDirection() == Direction.DOWNRIGHT || currentPipe.getDirection() == Direction.UPRIGHT) && (adjacentPipe.getDirection() == Direction.HORIZONTAL || adjacentPipe.getDirection() == Direction.DOWNLEFT || adjacentPipe.getDirection() == Direction.UPLEFT)) {
-
-
-
                     currentPipe = adjacentPipe;
                     currentPipe.updateTileBackground(currentPipe);
-
                     matchFound = true;
                 } else {
-
-                    board[row][col].updateDirection();
                     continue;
                 }
 
-            }
-
-
-
-
-
-            else if (row < board.length - 1 && !board[row + 1][col].isVisitedTile() && board[row + 1][col].getState() != State.EMPTY) {
-
-
+            } else if (row < board.length - 1 && !board[row + 1][col].isVisitedTile() && board[row + 1][col].getState() != State.EMPTY) {
                 adjacentPipe = board[row + 1][col];
                 previousPipe = currentPipe;
                 previousPipe.updateDirection();
-
                 currentPipe.updateDirection();
                 adjacentPipe.updateDirection();
 
-
-
                 if ((currentPipe.getDirection() == Direction.VERTICAL || currentPipe.getDirection() == Direction.DOWNLEFT || currentPipe.getDirection() == Direction.DOWNRIGHT) && (adjacentPipe.getDirection() == Direction.VERTICAL || adjacentPipe.getDirection() == Direction.UPRIGHT || adjacentPipe.getDirection() == Direction.UPLEFT)) {
-
-
                     currentPipe = adjacentPipe;
                     currentPipe.updateTileBackground(currentPipe);
-
-                    board[row][col].updateDirection();
-
                     matchFound = true;
 
-                } else{
-
+                } else {
                     continue;
-                    }
+                }
 
 
             }
@@ -337,6 +263,8 @@ public class Board extends JPanel {
 
         return false;
     }
+
+
 
     public void resetTileBackground(Tile tile) {
         tile.setBackground(null);
